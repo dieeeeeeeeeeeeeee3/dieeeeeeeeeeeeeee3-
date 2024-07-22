@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Monthsary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFC0CB; /* Pink background */
+            color: #000;
+            text-align: center;
+            overflow: hidden;
+            margin: 0;
+        }
+        .container {
+            display: none;
+            margin-top: 20px;
+        }
+        .container.active {
+            display: block;
+        }
+        .input-field, .btn {
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #ff69b4;
+            color: #fff;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #ff1493;
+        }
+        .hidden {
+            display: none;
+        }
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 200px;
+        }
+        .number-pad button {
+            background-color: #fff;
+            color: #ff0000;
+            border: 2px solid #000;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .number-pad button:hover {
+            background-color: #f0f0f0;
+        }
+        .message-text {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            display: none;
+        }
+        .envelope {
+            position: relative;
+            display: inline-block;
+            margin-top: 50px;
+            cursor: pointer;
+        }
+        .envelope .top {
+            width: 200px;
+            height: 100px;
+            background: white;
+            border: 2px solid black;
+            border-bottom: none;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            transform-origin: bottom;
+        }
+        .envelope .bottom {
+            width: 200px;
+            height: 100px;
+            background: white;
+            border: 2px solid black;
+            position: relative;
+        }
+        .envelope .heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            cursor: pointer;
+        }
+        @keyframes unroll {
+            0% { transform: translateX(-50%) rotateX(0deg); }
+            100% { transform: translateX(-50%) rotateX(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="anime-background">
+        <!-- Password Screen -->
+        <div class="container active" id="password-screen">
+            <h2>Enter Password</h2>
+            <input type="password" id="password" class="input-field" placeholder="Password">
+            <div class="number-pad">
+                <button onclick="appendNumber(1)">1</button>
+                <button onclick="appendNumber(2)">2</button>
+                <button onclick="appendNumber(3)">3</button>
+                <button onclick="appendNumber(4)">4</button>
+                <button onclick="appendNumber(5)">5</button>
+                <button onclick="appendNumber(6)">6</button>
+                <button onclick="appendNumber(7)">7</button>
+                <button onclick="appendNumber(8)">8</button>
+                <button onclick="appendNumber(9)">9</button>
+                <button onclick="clearPassword()">C</button>
+                <button onclick="appendNumber(0)">0</button>
+                <button onclick="checkPassword()">OK</button>
+            </div>
+        </div>
+
+        <!-- Name Entry Screen -->
+        <div class="container" id="name-screen">
+            <h2>Enter Your Name</h2>
+            <input type="text" id="name" class="input-field" placeholder="Name">
+            <p>Today is our first monthsary?</p>
+            <button class="btn" onclick="submitAnswer(true)">Yes</button>
+            <button class="btn" onclick="submitAnswer(false)">No</button>
+        </div>
+
+        <!-- Final Message Screen -->
+        <div class="container hidden" id="message-screen">
+            <div class="envelope" onclick="openEnvelope()">
+                <div class="top" id="envelope-top"></div>
+                <div class="bottom"></div>
+                <div class="heart"></div>
+            </div>
+            <h2 id="final-message" class="message-text"></h2>
+            <button class="btn" onclick="finish()">Finish</button>
+        </div>
+
+        <!-- Completion Screen -->
+        <div class="container hidden" id="completion-screen">
+            <h2>Aguy, natapos na si pikon!</h2>
+        </div>
+    </div>
+
+    <script>
+        const correctPassword = '0723'; // Your desired password
+
+        function appendNumber(number) {
+            const passwordInput = document.getElementById('password');
+            passwordInput.value += number;
+        }
+
+        function clearPassword() {
+            document.getElementById('password').value = '';
+        }
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            if (passwordInput === correctPassword) {
+                document.getElementById('password-screen').classList.remove('active');
+                document.getElementById('name-screen').classList.add('active');
+            } else {
+                alert('Incorrect password!');
+            }
+        }
+
+        function submitAnswer(answer) {
+            if (answer) {
+                document.getElementById('name-screen').classList.remove('active');
+                document.getElementById('message-screen').classList.add('active');
+            } else {
+                alert('Oops! Looks like you need to celebrate another day!');
+            }
+        }
+
+        function openEnvelope() {
+            const envelopeTop = document.getElementById('envelope-top');
+            envelopeTop.style.animation = 'unroll 1s forwards';
+            setTimeout(() => {
+                showMessage("I can't believe it's already been a month since we started this beautiful journey together. Every moment with you has been a blessing, and I am so grateful to have you in my life, your kindness, and your love have filled my days with joy and happiness. Thank you for being the amazing person that you are and for making me feel special every single day. I look forward to many more months and years of love, laughter, and unforgettable memories with you. Happy monthsary love!");
+                hideEnvelope();
+            }, 1000);
+        }
+
+        function showMessage(message) {
+            const finalMessage = document.getElementById('final-message');
+            finalMessage.textContent = message;
+            finalMessage.style.display = 'block';
+        }
+
+        function hideEnvelope() {
+            document.querySelector('.envelope').style.display = 'none';
+        }
+
+        function finish() {
+            document.getElementById('message-screen').classList.remove('active');
+            document.getElementById('completion-screen').classList.add('active');
+        }
+    </script>
+</body>
+</html>
